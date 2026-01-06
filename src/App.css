@@ -15,6 +15,12 @@ body, html {
   width: 100%; height: 100%;
   overflow: hidden;
   font-family: 'Fredoka One', cursive;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .app-wrapper {
@@ -37,6 +43,8 @@ body, html {
   border-radius: 50%;
   top: -20px;
   animation: smoothFall linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 @keyframes smoothFall {
@@ -134,7 +142,7 @@ body, html {
 /* --- ALL OTHER ORIGINAL STYLES --- */
 .snow-floor { position: absolute; bottom: -80px; width: 150%; height: 220px; background: white; border-radius: 50%; filter: blur(25px); z-index: 2; }
 .snow { position: absolute; width: 4px; height: 4px; background: white; border-radius: 50%; top: -20px; animation: smoothFall linear infinite; z-index: 5; }
-.center-content { display: flex; flex-direction: column; align-items: center; z-index: 10; text-align: center; width: 95%; margin: 18vh auto 0 auto; }
+.center-content { display: flex; flex-direction: column; align-items: center; z-index: 10; text-align: center; width: 95%; margin: 25vh auto 0 auto; }
 .premium-cat { width: 180px; height: auto; margin-bottom: 20px; }
 .bday-text { font-size: clamp(1.8rem, 8vw, 2.8rem); color: white; text-shadow: 0 0 20px rgba(255, 255, 255, 0.8); margin: 0; }
 .leslie-handwritten { font-family: 'Dancing Script', cursive; color: rgba(255, 255, 255, 0.8); font-size: clamp(0.9rem, 4vw, 1.2rem); letter-spacing: 1px; margin: 0; }
@@ -143,8 +151,12 @@ body, html {
 .mini-title { font-family: 'Dancing Script', cursive; color: var(--accent-pink); font-size: 1.4rem; }
 .main-title { font-size: 4.2rem; color: #2c334a; margin: 0 0 25px 0; }
 .tap-text { font-family: 'Dancing Script', cursive; color: var(--accent-pink); font-size: 1.6rem; margin-top: 25px; }
-.gift-button { background: #ff748d; color: white; border: none; padding: 18px 35px; border-radius: 50px; font-size: 1.2rem; margin-top: 20px; cursor: pointer; }
-.fly-button { background: #2c334a; color: white; border: none; padding: 12px 25px; border-radius: 50px; cursor: pointer; align-self: flex-end; }
+.gift-button { background: #ff748d; color: white; border: none; padding: 18px 35px; border-radius: 50px; font-size: 1.2rem; margin-top: 20px; cursor: pointer; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; outline: none; -webkit-tap-highlight-color: transparent; -webkit-appearance: none; appearance: none; }
+.gift-button:focus { outline: none; }
+.gift-button:active { transform: scale(0.98); outline: none; }
+.fly-button { background: #2c334a; color: white; border: none; padding: 12px 25px; border-radius: 50px; cursor: pointer; align-self: flex-end; -webkit-user-select: none; user-select: none; outline: none; -webkit-tap-highlight-color: transparent; -webkit-appearance: none; appearance: none; }
+.fly-button:focus { outline: none; }
+.fly-button:active { outline: none; }
 .song-card { background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; text-align: left; }
 .song-header { font-size: 2.2rem; color: var(--vintage-orange); margin-bottom: 30px; }
 .tap-hint { margin-top: 30px; color: var(--accent-pink); font-family: 'Dancing Script', cursive; font-size: 1.3rem; }
@@ -155,3 +167,285 @@ body, html {
 .pink { background: #ffadad; } .yellow { background: #ffd6a5; } .cyan { background: #9bf6ff; }
 .scrollable-content { max-height: 80vh; overflow-y: auto; padding-bottom: 50px; }
 .hard-work-note { font-family: 'Dancing Script', cursive; font-size: 1.4rem; color: var(--accent-pink); margin-top: 40px; }
+
+/* --- CAKE PAGE STYLES --- */
+.cake-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #0a0410 0%, #1a0f35 30%, #2d1654 50%, #1a0f35 70%, #0a0410 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.stars-background {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.night-star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle ease-in-out infinite;
+  box-shadow: 0 0 3px rgba(255, 255, 255, 0.7), 0 0 8px rgba(200, 150, 255, 0.3);
+  filter: blur(0.3px);
+  will-change: opacity;
+  backface-visibility: hidden;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}
+
+.cake-scrollable-wrapper {
+  position: relative;
+  z-index: 15;
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  scroll-behavior: smooth;
+  will-change: scroll-position;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cake-scrollable-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cake-scrollable-wrapper::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.cake-scrollable-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 215, 0, 0.3);
+  border-radius: 10px;
+}
+
+.cake-scrollable-wrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 215, 0, 0.5);
+}
+
+.stickers-cards-section {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  padding: 70px 20px 40px 20px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.sticker-card {
+  background: linear-gradient(135deg, rgba(150, 100, 200, 0.15) 0%, rgba(200, 100, 255, 0.1) 100%);
+  backdrop-filter: blur(12px);
+  border-radius: 25px;
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border: 1.5px solid rgba(200, 150, 255, 0.25);
+  transition: all 0.3s ease;
+  will-change: background, border;
+}
+
+.sticker-card:hover {
+  background: linear-gradient(135deg, rgba(150, 100, 200, 0.25) 0%, rgba(200, 100, 255, 0.2) 100%);
+  border: 1.5px solid rgba(255, 200, 100, 0.35);
+}
+
+.sticker-card-left {
+  justify-content: flex-start;
+  align-self: flex-start;
+}
+
+.sticker-card-right {
+  justify-content: flex-end;
+  flex-direction: row-reverse;
+  align-self: flex-end;
+}
+
+.sticker-card-img {
+  width: 90px;
+  height: 90px;
+  border-radius: 18px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 6px 15px rgba(0, 0, 0, 0.4)) brightness(1.05);
+  object-fit: cover;
+  border: 2px solid rgba(255, 200, 150, 0.2);
+  will-change: filter;
+}
+
+.sticker-card-text {
+  flex: 1;
+}
+
+.sticker-label {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.05rem;
+  background: linear-gradient(135deg, #ffd700 0%, #ffb347 50%, #ff8c42 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
+  margin: 0;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.cake-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+  padding: 50px 20px 80px 20px;
+  width: 100%;
+}
+
+.birthday-handwritten {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(2.5rem, 10vw, 4rem);
+  background: linear-gradient(45deg, #ffd700, #ffb347, #ff8c42);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
+  margin: 0;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.cake-container {
+  width: 280px;
+  height: auto;
+  cursor: pointer;
+  transition: filter 0.3s ease;
+  z-index: 20;
+  position: relative;
+  -webkit-user-select: none;
+  user-select: none;
+  will-change: filter;
+  backface-visibility: hidden;
+}
+
+.cake-container:active {
+  filter: brightness(1.1);
+}
+
+.cake-gif {
+  width: 100%;
+  height: auto;
+  border-radius: 0px;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.3));
+  box-shadow: none;
+  will-change: filter;
+}
+
+.blow-instruction {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.4rem;
+  color: #ffd700;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+  animation: pulse 1.8s ease-in-out infinite;
+  margin: 0;
+  z-index: 25;
+  position: relative;
+  pointer-events: none;
+}
+
+.blown-message {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2rem;
+  color: #ffd700;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+  margin: 0;
+  z-index: 25;
+  position: relative;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
+}
+
+/* --- MOBILE OPTIMIZATIONS --- */
+@media (max-width: 768px) {
+  body, html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .colourful-particle {
+    animation: smoothFall linear infinite;
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
+.night-star {
+    will-change: opacity;
+    backface-visibility: hidden;
+  }
+
+  .sticker-card {
+    padding: 18px;
+    gap: 15px;
+    border-radius: 20px;
+  }
+
+  .sticker-card-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 15px;
+  }
+
+  .sticker-label {
+    font-size: 1rem;
+  }
+
+  .cake-scrollable-wrapper {
+    -webkit-touch-callout: none;
+  }
+
+  .cake-container {
+    width: 250px;
+  }
+
+  .birthday-handwritten {
+    font-size: clamp(2rem, 8vw, 3.5rem);
+  }
+
+  .blow-instruction,
+  .blown-message {
+    font-size: 1.3rem;
+  }
+
+  .snow {
+    animation: smoothFall linear infinite;
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
+  button {
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button:active {
+    outline: none;
+    -webkit-outline: none;
+  }
+}
