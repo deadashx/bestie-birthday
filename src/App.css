@@ -141,11 +141,31 @@ body, html {
 
 /* --- ALL OTHER ORIGINAL STYLES --- */
 .snow-floor { position: absolute; bottom: -80px; width: 150%; height: 220px; background: white; border-radius: 50%; filter: blur(25px); z-index: 2; }
-.snow { position: absolute; width: 4px; height: 4px; background: white; border-radius: 50%; top: -20px; animation: smoothFall linear infinite; z-index: 5; }
+.snow { position: absolute; width: 4px; height: 4px; background: white; border-radius: 50%; top: -20px; animation: smoothFall linear infinite; z-index: 15; }
 .center-content { display: flex; flex-direction: column; align-items: center; z-index: 10; text-align: center; width: 95%; margin: 25vh auto 0 auto; }
 .premium-cat { width: 180px; height: auto; margin-bottom: 20px; }
+
+.cat-with-bubble {
+  position: relative;
+}
+
+.meow-bubble {
+  position: absolute;
+  left: 50%;
+  bottom: 95%;
+  transform: translate(-50%, 0);
+  background: rgba(255, 255, 255, 0.9);
+  color: #2c334a;
+  padding: 8px 12px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+  font-size: 0.95rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
 .bday-text { font-size: clamp(1.8rem, 8vw, 2.8rem); color: white; text-shadow: 0 0 20px rgba(255, 255, 255, 0.8); margin: 0; }
 .leslie-handwritten { font-family: 'Dancing Script', cursive; color: rgba(255, 255, 255, 0.8); font-size: clamp(0.9rem, 4vw, 1.2rem); letter-spacing: 1px; margin: 0; }
+.loading-clouds { position: absolute; width: 100%; height: auto; top: 0; left: 0; z-index: 8; object-fit: cover; pointer-events: none; }
 .sticker-cat-left { position: absolute; width: 85px; bottom: -30px; left: -40px; z-index: 60; }
 .sticker-cat-right { position: absolute; width: 80px; top: -45px; right: -35px; z-index: 60; }
 .mini-title { font-family: 'Dancing Script', cursive; color: var(--accent-pink); font-size: 1.4rem; }
@@ -172,12 +192,34 @@ body, html {
 .cake-screen {
   position: fixed;
   inset: 0;
-  background: linear-gradient(135deg, #0a0410 0%, #1a0f35 30%, #2d1654 50%, #1a0f35 70%, #0a0410 100%);
+  background: radial-gradient(120% 100% at 50% 0%, #0f244b 0%, #0b1d3d 45%, #0a1832 100%);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 10;
   overflow: hidden;
+}
+
+.cake-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0.22) 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cake-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('./assets/catpattern.png');
+  background-repeat: repeat;
+  background-size: 380px;
+  opacity: 0.06;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .stars-background {
@@ -214,6 +256,7 @@ body, html {
   flex-direction: column;
   align-items: center;
   padding: 20px 0;
+  padding-top: calc(env(safe-area-inset-top) + 80px);
   scroll-behavior: smooth;
   will-change: scroll-position;
   -webkit-overflow-scrolling: touch;
@@ -237,18 +280,73 @@ body, html {
   background: rgba(255, 215, 0, 0.5);
 }
 
+.cake-decorations {
+  position: relative;
+  width: 100%;
+  height: 190px;
+  padding-top: calc(env(safe-area-inset-top) + 20px);
+}
+
+.moon {
+  position: absolute;
+  top: calc(env(safe-area-inset-top) + 170px);
+  right: 40px;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(255, 255, 200, 0.7));
+  border-radius: 50%;
+  box-shadow: 0 0 40px rgba(255, 255, 150, 0.4), 0 0 80px rgba(255, 215, 0, 0.2);
+  animation: float-moon 4s ease-in-out infinite;
+}
+
+.moonlight-beam {
+  position: absolute;
+  top: calc(env(safe-area-inset-top) + 140px);
+  right: 60px;
+  width: 42vw;
+  max-width: 620px;
+  height: 62vh;
+  background: linear-gradient(120deg, rgba(255, 244, 200, 0.26), rgba(255, 244, 200, 0.12) 40%, rgba(0, 0, 0, 0) 70%);
+  transform: rotate(16deg);
+  filter: blur(16px);
+  mix-blend-mode: soft-light;
+  opacity: 0.34;
+  animation: beamPulse 7s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes beamPulse {
+  0%, 100% { opacity: 0.28; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes float-moon {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.memories-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(2rem, 8vw, 3rem);
+  color: white;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+  margin: 10px 0 30px 0;
+  letter-spacing: 2px;
+}
+
 .stickers-cards-section {
   display: flex;
   flex-direction: column;
   gap: 25px;
-  padding: 70px 20px 40px 20px;
+  padding: 0px 20px 40px 20px;
   width: 100%;
   max-width: 500px;
 }
 
 .sticker-card {
   background: linear-gradient(135deg, rgba(150, 100, 200, 0.15) 0%, rgba(200, 100, 255, 0.1) 100%);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(10px);
   border-radius: 25px;
   padding: 22px;
   display: flex;
@@ -311,6 +409,38 @@ body, html {
   padding: 50px 20px 80px 20px;
   width: 100%;
 }
+
+.polaroid-stickers {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  height: 0;
+}
+
+.polaroid-sticker {
+  position: absolute;
+  width: 80px;
+  height: 96px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.28);
+  padding: 8px 8px 18px 8px;
+}
+
+.polaroid-sticker img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.polaroid-sticker::before,
+.polaroid-sticker::after {
+  content: none;
+}
+
+.polaroid-left { left: 10px; top: 20px; transform: rotate(-4deg); }
+.polaroid-right { right: 10px; top: 95px; transform: rotate(4deg); }
 
 .birthday-handwritten {
   font-family: 'Dancing Script', cursive;
@@ -402,12 +532,16 @@ body, html {
     padding: 18px;
     gap: 15px;
     border-radius: 20px;
+    backdrop-filter: none;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1.5px solid rgba(200, 150, 255, 0.2);
   }
 
   .sticker-card-img {
     width: 80px;
     height: 80px;
     border-radius: 15px;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
   }
 
   .sticker-label {
@@ -447,5 +581,165 @@ body, html {
   button:active {
     outline: none;
     -webkit-outline: none;
+  }
+  .moonlight-beam {
+    display: none;
+  }
+}
+
+/* --- FINAL LETTER PAGE STYLES --- */
+.final-letter-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-cream) url('./assets/catpattern.png') repeat;
+  background-size: 320px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.final-letter-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(253, 246, 227, 0.85);
+  z-index: 11;
+}
+
+.final-letter-container {
+  position: relative;
+  z-index: 50;
+  text-align: center;
+  width: 100%;
+  max-width: 600px;
+}
+
+.grand-finale {
+  font-family: 'Dancing Script', cursive;
+  color: var(--accent-pink);
+  font-size: 1.2rem;
+  margin: 0 0 10px 0;
+  letter-spacing: 1px;
+}
+
+.final-title {
+  font-size: clamp(2.5rem, 8vw, 3.5rem);
+  color: #2c334a;
+  margin: 0 0 40px 0;
+  font-weight: 800;
+}
+
+.final-letter-box {
+  background: white;
+  border-radius: 40px;
+  padding: 50px 35px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.smiling-cat {
+  position: absolute;
+  top: -40px;
+  right: 30px;
+  width: 130px;
+  height: 130px;
+  border-radius: 20px;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
+  z-index: 100;
+}
+
+.final-letter-content {
+  margin-top: 30px;
+  text-align: left;
+}
+
+.heart-icon {
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.final-letter-title {
+  font-size: 1.8rem;
+  color: #ff748d;
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+.letter-greeting {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.5rem;
+  color: #ff748d;
+  margin: 0 0 20px 0;
+}
+
+.final-letter-text {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.8;
+  margin: 0 0 15px 0;
+  font-family: 'Fredoka One', cursive;
+}
+
+.final-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.seal-button {
+  background: #ff748d;
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.seal-button:active {
+  transform: scale(0.97);
+}
+
+@media (max-width: 768px) {
+  .final-letter-box {
+    padding: 40px 20px;
+  }
+
+  .smiling-cat {
+    width: 110px;
+    height: 110px;
+    right: 15px;
+    top: -30px;
+  }
+
+  .final-letter-title {
+    font-size: 1.5rem;
+  }
+
+  .letter-greeting {
+    font-size: 1.2rem;
+  }
+
+  .final-letter-text {
+    font-size: 0.95rem;
+  }
+
+  .seal-button {
+    padding: 12px 28px;
+    font-size: 1rem;
   }
 }
