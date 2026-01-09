@@ -62,7 +62,7 @@ function App() {
     // Fallback transition in case animation callback doesn't fire
     const timer = setTimeout(() => {
       setStep((prev) => (prev === 'loading' ? 'greeting' : prev));
-    }, 6500);
+    }, 5000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -72,7 +72,7 @@ function App() {
       return undefined;
     }
     const start = setTimeout(() => setShowMeow(true), 2000);
-    const end = setTimeout(() => setShowMeow(false), 3800);
+    const end = setTimeout(() => setShowMeow(false), 3500);
     return () => {
       clearTimeout(start);
       clearTimeout(end);
@@ -150,11 +150,11 @@ function App() {
                 src={catPic} 
                 className="premium-cat" 
                 initial={{ x: "-120vw" }} 
-                animate={{ x: ["-120vw", "0vw", "120vw"] }} 
+                animate={{ x: ["-120vw", "0vw", "0vw", "120vw"] }} 
                 transition={{
-                  duration: 5.6,
-                  times: [0, 0.5, 1],
-                  ease: [[0.22, 1, 0.36, 1], [0.64, 0, 0.78, 0]]
+                  duration: 4.5,
+                  times: [0, 0.444, 0.778, 1],
+                  ease: [[0.22, 1, 0.36, 1], "linear", [0.64, 0, 0.78, 0]]
                 }}
                 onAnimationComplete={() => setStep((prev) => (prev === 'loading' ? 'greeting' : prev))}
               />
