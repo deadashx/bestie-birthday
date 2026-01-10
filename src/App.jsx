@@ -202,13 +202,28 @@ function App() {
         {step === 'letter' && (
           <motion.div key="letter" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={smoothTransition} className="final-screen-container">
             <div className="content-wrapper letter-screen">
-              
-              <AnimatePresence>
-                {isEnvelopeOpen && (
+              <AnimatePresence mode="wait">
+                {!isEnvelopeOpen ? (
                   <motion.div 
+                    key="envelope"
+                    className="env-container"
+                    onClick={() => setIsEnvelopeOpen(true)}
+                    initial={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                  >
+                    <div className="env-back">
+                      <div className="env-flap"></div>
+                      <div className="env-front"></div>
+                    </div>
+                    <p className="tap-hint">Tap the envelope to open 💌</p>
+                  </motion.div>
+                ) : (
+                  <motion.div 
+                    key="letter"
                     className="big-letter-paper"
-                    initial={{ y: 150, opacity: 0 }}
-                    animate={{ y: -60, opacity: 1 }}
+                    initial={{ opacity: 0, scale: 0.85, y: 40 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
                     transition={{ duration: 0.6, ease: "easeOut" }}
                   >
                     <div className="paper-content">
@@ -224,20 +239,6 @@ function App() {
                   </motion.div>
                 )}
               </AnimatePresence>
-
-              <motion.div 
-                className={`env-container ${isEnvelopeOpen ? 'env-opened' : ''}`}
-                onClick={() => !isEnvelopeOpen && setIsEnvelopeOpen(true)}
-                animate={isEnvelopeOpen ? { x: "35vw", y: "30vh", scale: 0.5 } : { x: 0, y: 0, scale: 1 }}
-                transition={{ duration: 1, ease: "easeInOut" }}
-              >
-                <div className="env-back">
-                  <div className="env-flap"></div>
-                  <div className="env-front"></div>
-                </div>
-              </motion.div>
-
-              {!isEnvelopeOpen && <p className="tap-hint">Tap the envelope to open 💌</p>}
             </div>
           </motion.div>
         )}
