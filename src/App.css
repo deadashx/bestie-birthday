@@ -77,7 +77,17 @@ body, html {
 .content-wrapper { 
   position: relative;
   z-index: 40; 
-  text-align: center; width: 90%; max-width: 450px; margin-top: -5vh; 
+  text-align: center; 
+  width: 90%; 
+  max-width: 450px; 
+  margin-top: -5vh; 
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    width: 85%;
+    max-width: 380px;
+  }
 }
 
 /* --- MESSAGE BOX --- */
@@ -174,7 +184,7 @@ body, html {
   font-weight: 600;
   white-space: nowrap;
 }
-.bday-text { font-size: clamp(1.8rem, 8vw, 2.8rem); color: white; text-shadow: 0 0 20px rgba(255, 255, 255, 0.8); margin: 0; }
+.bday-text { font-family: 'Dancing Script', cursive; font-size: clamp(2.5rem, 10vw, 4rem); color: white; text-shadow: 0 0 20px rgba(255, 255, 255, 0.8); margin: 0; font-weight: 700; }
 .leslie-handwritten { font-family: 'Dancing Script', cursive; color: rgba(255, 255, 255, 0.8); font-size: clamp(0.9rem, 4vw, 1.2rem); letter-spacing: 1px; margin: 0; }
 .loading-clouds { position: absolute; width: 100%; height: auto; top: 0; left: 0; z-index: 8; object-fit: cover; pointer-events: none; }
 .sticker-cat-left { position: absolute; width: 85px; bottom: -30px; left: -40px; z-index: 60; }
@@ -188,8 +198,228 @@ body, html {
 .fly-button { background: #2c334a; color: white; border: none; padding: 12px 25px; border-radius: 50px; cursor: pointer; align-self: flex-end; -webkit-user-select: none; user-select: none; outline: none; -webkit-tap-highlight-color: transparent; -webkit-appearance: none; appearance: none; }
 .fly-button:focus { outline: none; }
 .fly-button:active { outline: none; }
-.song-card { background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; text-align: left; }
-.song-header { font-size: 2.2rem; color: var(--vintage-orange); margin-bottom: 30px; }
+.song-card { 
+  background: white; 
+  border-radius: 20px; 
+  padding: clamp(14px, 4vw, 18px);
+  margin-bottom: 12px; 
+  display: flex; 
+  align-items: center; 
+  gap: clamp(12px, 3vw, 18px);
+  text-align: left;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.song-card:hover {
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+.song-card.active {
+  border: 2px solid var(--accent-pink);
+  box-shadow: 0 8px 25px rgba(255, 137, 163, 0.2);
+}
+
+.song-image-box {
+  width: clamp(80px, 20vw, 100px);
+  height: clamp(80px, 20vw, 100px);
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.song-image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.song-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.song-title {
+  font-size: clamp(1rem, 4vw, 1.3rem);
+  color: var(--vintage-orange);
+  margin: 0;
+  font-weight: 700;
+  word-break: break-word;
+}
+
+.song-subtitle {
+  font-size: clamp(0.65rem, 2.5vw, 0.8rem);
+  color: #d2691e;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.85;
+  word-break: break-word;
+}
+
+.player-controls {
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 2vw, 10px);
+  margin-top: 8px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.play-btn {
+  background: var(--accent-pink);
+  color: white;
+  border: none;
+  width: clamp(32px, 8vw, 36px);
+  height: clamp(32px, 8vw, 36px);
+  border-radius: 50%;
+  font-size: clamp(0.8rem, 2.5vw, 1rem);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.play-btn:active {
+  transform: scale(0.95);
+}
+
+.progress-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: clamp(4px, 1.5vw, 6px);
+  min-width: 100px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #e0e0e0;
+  outline: none;
+  cursor: pointer;
+  accent-color: var(--accent-pink);
+  min-width: 50px;
+}
+
+.progress-bar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-pink);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.progress-bar::-moz-range-thumb {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-pink);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.progress-bar::-moz-range-track {
+  background: transparent;
+  border: none;
+}
+
+.progress-bar::-moz-range-progress {
+  background: var(--accent-pink);
+  height: 4px;
+  border-radius: 2px;
+}
+
+.time-display {
+  font-size: clamp(0.6rem, 2vw, 0.7rem);
+  color: #999;
+  white-space: nowrap;
+  min-width: 45px;
+  text-align: right;
+  font-weight: 600;
+}
+
+.songs-screen {
+  overflow-y: auto !important;
+  padding: 60px 0 40px 0;
+}
+
+@media (max-width: 768px) {
+  .songs-screen {
+    padding: 80px 0 40px 0;
+  }
+}
+
+.songs-screen::-webkit-scrollbar {
+  width: 6px;
+}
+
+.songs-screen::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.songs-screen::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.songs-screen::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+.songs-wrapper {
+  max-height: none;
+  overflow-y: visible;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.songs-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+
+.songs-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.songs-wrapper::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.songs-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+.songs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+}
+
+.song-header { 
+  font-size: clamp(1.8rem, 6vw, 2.2rem);
+  color: var(--vintage-orange); 
+  margin-bottom: 20px; 
+}
 .tap-hint { margin-top: 30px; color: var(--accent-pink); font-family: 'Dancing Script', cursive; font-size: 1.3rem; }
 .letter-handwritten { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: #333; margin: 0; }
 .letter-body { font-family: 'Fredoka One', cursive; font-size: 1.1rem; color: #555; line-height: 1.6; margin-top: 20px; }

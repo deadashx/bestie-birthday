@@ -12,6 +12,14 @@ import pic2 from './assets/pic2.jpg';
 import pic3 from './assets/pic3.jpg';
 import pic4 from './assets/pic4.jpg';
 import pic5 from './assets/pic5.jpg';
+import treehouseAudio from './assets/treehouse.mp3';
+import treehouseImg from './assets/treehouse.png';
+import audio505 from './assets/505.mp3';
+import img505 from './assets/505.png';
+import mineAllMineAudio from './assets/mine all mine.mp3';
+import mineAllMineImg from './assets/mine all mine.png';
+import heheAudio from './assets/Hehe.mp3';
+import heheImg from './assets/Hehe.png';
 import { motion, AnimatePresence } from 'framer-motion';
 import './App.css';
 
@@ -49,10 +57,43 @@ function App() {
   const [isEnvelopeOpen, setIsEnvelopeOpen] = useState(false);
   const [isBlown, setIsBlown] = useState(false);
   const [showMeow, setShowMeow] = useState(false);
+  const [currentSongIndex, setCurrentSongIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const audioRef = React.useRef(null);
+  
   const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
   const prefersReduced = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const flakeCount = prefersReduced ? 10 : (isMobile ? 20 : 28);
   const starCount = prefersReduced ? 20 : (isMobile ? 40 : 60);
+
+  const songs = [
+    {
+      title: 'Treehouse',
+      subtitle: 'WRAPPED STRAIGHT FROM MY HEART',
+      audio: treehouseAudio,
+      image: treehouseImg
+    },
+    {
+      title: '505',
+      subtitle: 'LIKE FAIRY LIGHTS FOR MY HEART',
+      audio: audio505,
+      image: img505
+    },
+    {
+      title: 'Mine All Mine',
+      subtitle: 'SOME PEOPLE FEEL LIKE HOME',
+      audio: mineAllMineAudio,
+      image: mineAllMineImg
+    },
+    {
+      title: 'Hehe',
+      subtitle: 'BIRTHDAY SPECIAL',
+      audio: heheAudio,
+      image: heheImg
+    }
+  ];
 
   const snowFlakes = React.useMemo(() => 
     [...Array(flakeCount)].map((_, i) => ({
@@ -83,6 +124,90 @@ function App() {
       clearTimeout(end);
     };
   }, [step]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || step !== 'songs') return;
+
+    const handleEnded = () => {
+      if (currentSongIndex < songs.length - 1) {
+        const nextIndex = currentSongIndex + 1;
+        setCurrentSongIndex(nextIndex);
+        // Load and play next song
+        const nextSong = songs[nextIndex];
+        if (nextSong) {
+          audio.src = nextSong.audio;
+          audio.load();
+          setTimeout(async () => {
+            try {
+              await audio.play();
+              setIsPlaying(true);
+            } catch (err) {
+              console.error('Auto-play failed:', err);
+              setIsPlaying(false);
+            }
+          }, 100);
+        }
+      } else {
+        setIsPlaying(false);
+      }
+    };
+
+    audio.addEventListener('ended', handleEnded);
+
+    return () => {
+      audio.removeEventListener('ended', handleEnded);
+    };
+  }, [currentSongIndex, songs, step]);
+
+
+  const handlePlayPause = async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    try {
+      if (isPlaying) {
+        audio.pause();
+        setIsPlaying(false);
+      } else {
+        // Make sure audio is ready
+        if (!audio.src) {
+          const songUrl = songs[currentSongIndex]?.audio;
+          if (songUrl) {
+            audio.src = songUrl;
+            audio.load();
+          }
+        }
+        
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          await playPromise;
+          setIsPlaying(true);
+        } else {
+          setIsPlaying(true);
+        }
+      }
+    } catch (err) {
+      console.error('Play error:', err.message);
+      setIsPlaying(false);
+    }
+  };
+
+  const handleProgressChange = (e) => {
+    const audio = audioRef.current;
+    if (audio) {
+      const newTime = (parseFloat(e.target.value) / 100) * duration;
+      audio.currentTime = newTime;
+      setCurrentTime(newTime);
+    }
+  };
+
+  const formatTime = (time) => {
+    if (!time || isNaN(time)) return '0:00';
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
 
   useEffect(() => {
     // Request fullscreen on mobile for better experience
@@ -176,7 +301,7 @@ function App() {
                   </motion.div>
                 )}
               </AnimatePresence>
-              <h1 className="bday-text">Happy Birthday! 🎂</h1>
+              <h1 className="bday-text">Happy Birthday!!! 🎂</h1>
               <div className="leslie-dedication"><p className="leslie-handwritten">For Leslie 07 Feb 2026</p></div>
             </div>
           </motion.div>
@@ -263,10 +388,86 @@ function App() {
         )}
 
         {step === 'songs' && (
-          <motion.div key="songs" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={smoothTransition} className="final-screen-container">
-            <div className="content-wrapper scrollable-content">
+          <motion.div key="songs" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={smoothTransition} className="final-screen-container songs-screen">
+            <audio 
+              ref={audioRef} 
+              crossOrigin="anonymous" 
+              preload="auto"
+              onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
+              onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
+              onDurationChange={(e) => setDuration(e.currentTarget.duration)}
+              onEnded={() => {
+                if (currentSongIndex < songs.length - 1) {
+                  setCurrentSongIndex(currentSongIndex + 1);
+                } else {
+                  setIsPlaying(false);
+                }
+              }}
+            />
+            <div className="content-wrapper">
               <h2 className="song-header">Songs for You 🎵</h2>
-              <div className="song-card"><h3>Treehouse</h3><p>Your Favorite 🏠</p></div>
+              
+              <div className="songs-container">
+                {songs.map((song, index) => (
+                  <motion.div 
+                    key={index}
+                    className={`song-card ${currentSongIndex === index ? 'active' : ''}`}
+                    onClick={async () => {
+                      setCurrentSongIndex(index);
+                      const audio = audioRef.current;
+                      if (audio) {
+                        audio.src = songs[index].audio;
+                        audio.load();
+                        setTimeout(async () => {
+                          try {
+                            await audio.play();
+                            setIsPlaying(true);
+                          } catch (err) {
+                            console.error('Play failed:', err);
+                          }
+                        }, 100);
+                      }
+                    }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1, duration: 0.4 }}
+                  >
+                    <div className="song-image-box">
+                      <img src={song.image} alt={song.title} />
+                    </div>
+                    
+                    <div className="song-info">
+                      <h3 className="song-title">{song.title}</h3>
+                      <p className="song-subtitle">{song.subtitle}</p>
+                      
+                      {currentSongIndex === index && (
+                        <div className="player-controls">
+                          <button className="play-btn" onClick={(e) => {
+                            e.stopPropagation();
+                            handlePlayPause();
+                          }}>
+                            {isPlaying ? '⏸' : '▶'}
+                          </button>
+                          
+                          <div className="progress-container">
+                            <input 
+                              type="range" 
+                              className="progress-bar"
+                              min="0"
+                              max="100"
+                              value={duration ? (currentTime / duration) * 100 : 0}
+                              onChange={handleProgressChange}
+                            />
+                          </div>
+                          
+                          <span className="time-display">{formatTime(currentTime)} / {formatTime(duration)}</span>
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+              
               <div className="hard-work-note">
                 <p>I hope u like it 💖</p>
                 <button className="gift-button" onClick={() => setStep('cake')} style={{marginTop: '20px'}}>Continue →</button>
