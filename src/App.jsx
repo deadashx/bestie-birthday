@@ -18,6 +18,8 @@ import audio505 from './assets/505.mp3';
 import img505 from './assets/505.png';
 import mineAllMineAudio from './assets/mine all mine.mp3';
 import mineAllMineImg from './assets/mine all mine.png';
+import loveMeNotAudio from './assets/love me not.mp3';
+import loveMeNotImg from './assets/love me not.png';
 import heheAudio from './assets/Hehe.mp3';
 import heheImg from './assets/Hehe.png';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -86,6 +88,12 @@ function App() {
       subtitle: 'SOME PEOPLE FEEL LIKE HOME',
       audio: mineAllMineAudio,
       image: mineAllMineImg
+    },
+    {
+      title: 'Love Me Not',
+      subtitle: 'I THOUGHT I SHOULD ADD MY FAVOURITE TOO',
+      audio: loveMeNotAudio,
+      image: loveMeNotImg
     },
     {
       title: 'Hehe',
