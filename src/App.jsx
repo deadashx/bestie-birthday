@@ -726,7 +726,7 @@ function App() {
                     <button className="seal-button" onClick={() => setStep('loading')}>Restart 🔄</button>
                   </div>
                   <p className="github-link-text">
-                    also if u wan checkout the code for this u can go here, and idk whytf this site lags on chrome on other browser its fine{' '}
+                    idk whytf this lags on chrome but on other browser its smooth asf, also if u wan checkout the code for this u can go here{' '}
                     <a href="https://github.com/deadashx/her-birthday" target="_blank" rel="noopener noreferrer">https://github.com/deadashx/her-birthday</a>
                   </p>
                 </div>
